@@ -1,10 +1,22 @@
+import { Flex } from '@chakra-ui/layout'
 import React from 'react'
-// import {} from '@chakra-ui/react'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import Header from './components/Header'
+import Posts from './components/Posts'
 
 function App() {
   return (
     <>
-      <h1>Hello</h1>
+      <BrowserRouter>
+        <Flex w="100%" h="100%" flexDirection="column">
+          <Header />
+          <Switch>
+            <Route exact path="/" component={Posts} />
+            <Route path="/login" />
+            <Route path="/signup" />
+          </Switch>
+        </Flex>
+      </BrowserRouter>
     </>
   )
 }
