@@ -1,9 +1,11 @@
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const User = require('../models/User')
+const UserToFollow = require('../models/UserToFollow')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const { check, validationResult } = require('express-validator')
+const auth = require('../config/middlewares/auth')
 
 router.post(
   '/',
@@ -48,9 +50,47 @@ router.post(
         res.json({ token })
       })
     } catch (error) {
+      console.error({ error })
       res.status(500).send('server error')
     }
   }
 )
+
+router.put('/follow/:userIdToFollow', auth, async (req, res) => {
+  try {
+    if (req.user.id == req.params.userIdToFollow) {
+      return res.status(500).send({ message: "Error! Can't follow oneself!" })
+    } else {
+      let result = await UserToFollow.findOneAndUpdate({ userId: req.user.id }, { $addToSet: { userToFollowIds: req.params.userIdToFollow } })
+      if (result) {
+        return res.json({ result })
+      } else {
+        result = new UserToFollow({
+          userId: req.user.id,
+          userToFollowIds: [req.params.userIdToFollow],
+        })
+        await result.save()
+        return res.json({ result })
+      }
+    }
+  } catch (error) {
+    console.error({ error })
+    res.status(500).send(error)
+  }
+})
+
+router.put('/unfollow/:userIdToUnfollow', auth, async (req, res) => {
+  try {
+    if (req.user.id == req.params.userIdToUnfollow) {
+      return res.status(500).send({ message: "Error! Can't unfollow oneself!" })
+    } else {
+      let result = await UserToFollow.findOneAndUpdate({ userId: req.user.id }, { $pull: { userToFollowIds: req.params.userIdToUnfollow } })
+      return res.json({ result })
+    }
+  } catch (error) {
+    console.error({ error })
+    res.status(500).send(error)
+  }
+})
 
 module.exports = router

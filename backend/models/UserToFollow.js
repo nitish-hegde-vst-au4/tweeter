@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
-const FollowerSchema = new mongoose.Schema({
+const UserToFollowSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'users',
   },
-  followerId: [
+  userToFollowIds: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'users',
@@ -13,4 +13,4 @@ const FollowerSchema = new mongoose.Schema({
   ],
 })
 
-module.exports = Follower = mongoose.model('follower', FollowerSchema)
+module.exports = UserToFollow = mongoose.model('usersToFollow', UserToFollowSchema)
