@@ -22,7 +22,7 @@ router.get('/', auth, async (req, res) => {
 // desc: login route
 // access: protected
 router.post(
-  '/',
+  '/login',
   [check('username', 'Please include a username').not().isEmpty(), check('password', 'password should contain atleast six characters').exists()],
   async (req, res) => {
     const errors = validationResult(req)
