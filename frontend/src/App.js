@@ -3,6 +3,7 @@ import React from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import Header from './components/Header'
 import Posts from './components/Posts'
+import Form from './components/Form'
 
 function App() {
   return (
@@ -10,10 +11,11 @@ function App() {
       <BrowserRouter>
         <Flex w="100%" h="100%" flexDirection="column">
           <Header />
+          <Posts />
           <Switch>
-            <Route exact path="/" component={Posts} />
-            <Route path="/login" />
-            <Route path="/signup" />
+            {/* <Route path="/" component={Posts} /> */}
+            <Route path="/login" render={(props) => <Form {...props} type="Login" />} />
+            <Route path="/signup" render={(props) => <Form {...props} type="Signup" />} />
           </Switch>
         </Flex>
       </BrowserRouter>
